@@ -11,9 +11,16 @@ import ListeEvenements from './src/screens/ListeEvenements';
 import AdminDashboard from './src/admin/screens/AdminDashboard';
 import AdminLogin from './src/admin/screens/AdminLogin';
 
+// --- IMPORTS ESPACE MEMBRE ---
+import MemberDashboard from './src/member/screens/MemberDashboard';
+import MemberLogin from './src/member/screens/MemberLogin';
+
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('Welcome');
+  
+  // États de sécurité
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+  const [isMemberAuthenticated, setIsMemberAuthenticated] = useState(false);
 
   const renderScreen = () => {
     switch (currentScreen) {
@@ -36,7 +43,7 @@ export default function App() {
               </View>
             </TouchableOpacity>
 
-            {/* 2. MEMBRE (Désormais accessible) */}
+            {/* 2. MEMBRE */}
             <TouchableOpacity 
               style={[styles.card, { borderLeftColor: '#6A3FB6' }]} 
               onPress={() => setCurrentScreen('MembrePortal')}
@@ -48,7 +55,7 @@ export default function App() {
               </View>
             </TouchableOpacity>
 
-            {/* 3. ADMIN (Avec sécurité par code) */}
+            {/* 3. ADMIN */}
             <TouchableOpacity 
               style={[styles.card, { borderLeftColor: '#10B981' }]} 
               onPress={() => setCurrentScreen('Admin')}
@@ -65,14 +72,23 @@ export default function App() {
         );
 
       case 'MembrePortal':
+        // Vérification de l'authentification Membre
+        if (!isMemberAuthenticated) {
+          return (
+            <MemberLogin 
+              onLoginSuccess={() => setIsMemberAuthenticated(true)} 
+              onBack={() => setCurrentScreen('Dashboard')} 
+            />
+          );
+        }
         return (
-          <View style={styles.centerContainer}>
-            <Text style={styles.placeholderText}>Member Portal 🚀</Text>
-            <Text style={{color: '#888', marginBottom: 20}}>Interface under construction...</Text>
-            <TouchableOpacity onPress={() => setCurrentScreen('Dashboard')}>
-              <Text style={styles.backLink}>Back to Home</Text>
-            </TouchableOpacity>
-          </View>
+          <MemberDashboard 
+            onLogout={() => {
+              setIsMemberAuthenticated(false);
+              setCurrentScreen('Dashboard');
+            }} 
+            onNavigate={(screen:any) => console.log("Navigate to member screen:", screen)}
+          />
         );
 
       case 'Admin':
