@@ -1,7 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-export default function MemberProfile({ onBack }) {
+type MemberProfileProps = {
+    onBack: () => void;
+};
+
+export default function MemberProfile({ onBack }: MemberProfileProps) {
     return (
     <View style={styles.container}>
         <TouchableOpacity onPress={onBack} style={styles.back}><Text style={styles.backText}>← Portal</Text></TouchableOpacity>

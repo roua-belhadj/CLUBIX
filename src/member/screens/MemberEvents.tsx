@@ -1,7 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 
-export default function MemberEvents({ onBack }) {
+type MemberEventsProps = {
+    onBack: () => void;
+};
+
+export default function MemberEvents({ onBack }: MemberEventsProps) {
     const data = [
     { id: 1, event: "Tech Workshop", task: "Setup the projector", status: "Ongoing" },
     { id: 2, event: "Club Meeting", task: "Take minutes of meeting", status: "Pending" }
